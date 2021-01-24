@@ -10,11 +10,6 @@ impl TestRequest {
         TestRequest { name }
     }
 }
-
-impl RequestData for TestRequest {
-    type ResponseData = TestResponse;
-}
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TestResponse {
     pub number: u32,
@@ -27,6 +22,9 @@ impl TestResponse {
     }
 }
 
-pub trait RequestData {
-    type ResponseData: DeserializeOwned;
+pub enum ClientPacket {
+    Test(TestRequest),
+}
+pub enum ServerPacket {
+    Test(TestResponse),
 }
