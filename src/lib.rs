@@ -22,9 +22,12 @@ impl TestResponse {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub enum ClientPacket {
     Test(TestRequest),
 }
+
+#[derive(Serialize, Deserialize, Debug)]
 pub enum ServerPacket {
     Test(TestResponse),
 }
