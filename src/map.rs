@@ -38,6 +38,12 @@ impl Map {
         let y = pos.y as usize;
         &self.tiles[y * self.x_size + x]
     }
+    pub fn x_size(&self) -> usize {
+        self.x_size
+    }
+    pub fn y_size(&self) -> usize {
+        self.y_size
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
