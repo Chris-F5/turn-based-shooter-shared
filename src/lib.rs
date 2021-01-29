@@ -1,4 +1,6 @@
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+pub mod map;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TestRequest {
