@@ -9,6 +9,11 @@ pub enum TileAppearance {
 pub struct Tile {
     appearance: TileAppearance,
 }
+impl Tile {
+    pub fn appearance(&self) -> &TileAppearance {
+        &self.appearance
+    }
+}
 
 #[derive(Serialize, Deserialize)]
 pub struct Map {
