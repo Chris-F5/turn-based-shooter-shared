@@ -11,6 +11,16 @@ pub struct Tile {
     appearance: TileAppearance,
 }
 impl Tile {
+    pub fn new_white() -> Tile {
+        Tile {
+            appearance: TileAppearance::TestWhite,
+        }
+    }
+    pub fn new_black() -> Tile {
+        Tile {
+            appearance: TileAppearance::TestBlack,
+        }
+    }
     pub fn appearance(&self) -> &TileAppearance {
         &self.appearance
     }
@@ -28,9 +38,7 @@ impl Map {
         let mut tiles = Vec::with_capacity(x_size * y_size);
         for _ in 0..y_size {
             for _ in 0..x_size {
-                tiles.push(Tile {
-                    appearance: TileAppearance::TestWhite,
-                })
+                tiles.push(Tile::new_white())
             }
         }
         Map {
