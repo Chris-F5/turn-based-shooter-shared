@@ -43,11 +43,11 @@ impl Map {
         let y = pos.y as usize;
         &self.tiles[y * self.x_size + x]
     }
-    pub fn x_size(&self) -> usize {
-        self.x_size
+    pub fn x_size(&self) -> u32 {
+        self.x_size as u32
     }
-    pub fn y_size(&self) -> usize {
-        self.y_size
+    pub fn y_size(&self) -> u32 {
+        self.y_size as u32
     }
 }
 
