@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub enum TileAppearance {
     TestWhite,
+    TestBlack,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -42,6 +43,11 @@ impl Map {
         let x = pos.x as usize;
         let y = pos.y as usize;
         &self.tiles[y * self.x_size + x]
+    }
+    pub fn set_tile(&mut self, pos: &TilePos, tile: Tile) {
+        let x = pos.x as usize;
+        let y = pos.y as usize;
+        self.tiles[y * self.x_size + x] = tile;
     }
     pub fn x_size(&self) -> u32 {
         self.x_size as u32
