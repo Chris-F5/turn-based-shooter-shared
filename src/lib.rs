@@ -27,9 +27,11 @@ impl TestResponse {
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ClientPacket {
     Test(TestRequest),
+    RequestBattle,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ServerPacket {
     Test(TestResponse),
+    NewBattle(map::Map),
 }
