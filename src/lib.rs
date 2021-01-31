@@ -1,4 +1,4 @@
-pub mod map;
+pub mod battle;
 
 use serde::{Deserialize, Serialize};
 
@@ -24,14 +24,16 @@ impl TestResponse {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub enum ClientPacket {
     Test(TestRequest),
     RequestBattle,
+    SelectMove(u32),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub enum ServerPacket {
     Test(TestResponse),
-    NewBattle(map::Map),
+    BattleInfo(battle::BattleInfo),
+    BattleInfoUpdate(battle::BattleInfoUpdate),
 }

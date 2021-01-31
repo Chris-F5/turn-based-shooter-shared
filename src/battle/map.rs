@@ -1,12 +1,14 @@
+use super::TilePos;
+
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone)]
 pub enum TileAppearance {
     TestWhite,
     TestBlack,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Tile {
     appearance: TileAppearance,
 }
@@ -26,7 +28,7 @@ impl Tile {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Map {
     tiles: Vec<Tile>,
     x_size: usize,
@@ -62,30 +64,5 @@ impl Map {
     }
     pub fn y_size(&self) -> u32 {
         self.y_size as u32
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TilePos {
-    pub x: u32,
-    pub y: u32,
-}
-impl TilePos {
-    pub fn new(x: u32, y: u32) -> TilePos {
-        TilePos { x, y }
-    }
-    pub fn world_pos(&self) -> WorldPos {
-        WorldPos::new(self.x as f64, self.y as f64)
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct WorldPos {
-    pub x: f64,
-    pub y: f64,
-}
-impl WorldPos {
-    pub fn new(x: f64, y: f64) -> WorldPos {
-        WorldPos { x, y }
     }
 }
