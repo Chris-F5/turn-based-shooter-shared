@@ -99,10 +99,16 @@ impl Battle {
             None
         }
     }
+    pub fn white_battle_info(&mut self) -> &BattleInfo {
+        &self.white_info
+    }
+    pub fn black_battle_info(&mut self) -> &BattleInfo {
+        &self.black_info
+    }
 }
 
-type ActionSet = Vec<Action>;
-type ActionIndex = usize;
+pub type ActionSet = Vec<Action>;
+pub type ActionIndex = usize;
 
 #[derive(Deserialize, Serialize)]
 pub enum Team {

@@ -27,13 +27,13 @@ impl TestResponse {
 #[derive(Serialize, Deserialize)]
 pub enum ClientPacket {
     Test(TestRequest),
-    RequestBattle,
-    SelectMove(u32),
+    JoinBattleMatchmaker,
+    SelectMove(battle::ActionIndex),
 }
 
 #[derive(Serialize, Deserialize)]
 pub enum ServerPacket {
     Test(TestResponse),
-    BattleInfo(battle::BattleInfo),
+    BattleStart(battle::BattleInfo),
     BattleInfoUpdate(battle::BattleInfoUpdate),
 }

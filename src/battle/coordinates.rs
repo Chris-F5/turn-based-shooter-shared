@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::ops;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TilePos {
