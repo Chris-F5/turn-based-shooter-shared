@@ -1,9 +1,9 @@
 mod coordinates;
-mod map;
+pub mod map;
 
 pub use coordinates::{TilePos, TileVec, WorldPos};
-
 pub use map::Map;
+
 use serde::{Deserialize, Serialize};
 
 pub struct Battle {
