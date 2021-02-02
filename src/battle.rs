@@ -110,24 +110,24 @@ impl Battle {
 pub type ActionSet = Vec<Action>;
 pub type ActionIndex = usize;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub enum Team {
     Black,
     White,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Action {
     team: Team,
     action_type: ActionType,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub enum ActionType {
     Move(TileVec),
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct BattleInfo {
     map: Map,
     action_set: ActionSet,
