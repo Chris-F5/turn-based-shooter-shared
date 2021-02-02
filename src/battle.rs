@@ -99,10 +99,10 @@ impl Battle {
             None
         }
     }
-    pub fn white_battle_info(&mut self) -> &BattleInfo {
+    pub fn white_battle_info(&self) -> &BattleInfo {
         &self.white_info
     }
-    pub fn black_battle_info(&mut self) -> &BattleInfo {
+    pub fn black_battle_info(&self) -> &BattleInfo {
         &self.black_info
     }
 }
