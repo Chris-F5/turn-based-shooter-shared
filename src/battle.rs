@@ -110,7 +110,7 @@ impl Battle {
 pub type ActionSet = Vec<Action>;
 pub type ActionIndex = usize;
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Serialize, Copy, Clone)]
 pub enum Team {
     Black,
     White,
