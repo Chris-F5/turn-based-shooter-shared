@@ -28,6 +28,11 @@ impl TestResponse {
 pub enum ClientPacket {
     Test(TestRequest),
     JoinBattleMatchmaker,
+    BattleRequest(ClientBattleRequest),
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum ClientBattleRequest {
     SelectAction(battle::ActionIndex),
 }
 
