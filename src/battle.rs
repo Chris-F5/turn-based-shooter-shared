@@ -7,146 +7,95 @@ pub use map::Map;
 use serde::{Deserialize, Serialize};
 
 pub struct Battle {
-    data: BattleData,
-    white_info_update: Option<BattleInfoUpdate>,
-    black_info_update: Option<BattleInfoUpdate>,
-    white_info: BattleInfo,
-    black_info: BattleInfo,
-}
-
-pub struct BattleData {
     map: Map,
     white_player_pos: TilePos,
     black_player_pos: TilePos,
+    team_turn: Team,
 }
-impl BattleData {
-    pub fn new(map: Map, black_player_pos: TilePos, white_player_pos: TilePos) -> BattleData {
-        BattleData {
-            map,
-            black_player_pos,
-            white_player_pos,
-        }
-    }
-}
-
-impl BattleData {
-    fn get_action_set(&self, team: Team) -> ActionSet {
-        match team {
-            Team::White => vec![Action {
-                team,
-                action_type: ActionType::Move(TileVec::new(1, 0)),
-            }],
-            Team::Black => vec![Action {
-                team,
-                action_type: ActionType::Move(TileVec::new(0, -1)),
-            }],
-        }
-    }
-}
-
+pub struct ActionError;
 impl Battle {
-    pub fn new(data: BattleData) -> Battle {
+    pub fn new() -> Battle {
+        let mut map = Map::new(8, 8);
+        map.set_tile(&TilePos::new(2, 6), map::Tile::new_black());
         Battle {
-            white_info: BattleInfo::from_battle_data(&data, Team::White),
-            black_info: BattleInfo::from_battle_data(&data, Team::Black),
-            white_info_update: None,
-            black_info_update: None,
-            data,
+            map,
+            white_player_pos: TilePos::new(1, 1),
+            black_player_pos: TilePos::new(6, 6),
+            team_turn: Team::White,
         }
     }
-    pub fn play_action(&mut self, action_index: ActionIndex, team: Team) {
-        let action = match team {
-            Team::White => &self.white_info.action_set[action_index],
-            Team::Black => &self.black_info.action_set[action_index],
-        };
-        match &action.action_type {
-            ActionType::Move(vec) => match action.team {
+    pub fn battle_info(&self, team: Team) -> BattleInfo {
+        BattleInfo {
+            team,
+            team_turn: self.team_turn,
+            map: self.map.clone(),
+            black_player_pos: self.black_player_pos.clone(),
+            white_player_pos: self.white_player_pos.clone(),
+        }
+    }
+    pub fn play_action(
+        &mut self,
+        action: Action,
+        team: Team,
+    ) -> Result<(BattleInfoUpdate, BattleInfoUpdate), ActionError> {
+        if self.team_turn == team {
+            return Err(ActionError);
+        }
+        match action {
+            Action::Move(vec) => match team {
                 Team::White => {
-                    self.data.white_player_pos.add_vec(&vec);
+                    let new_pos = self.white_player_pos.add_vec(&vec);
+                    if self.map.get_tile(&new_pos).is_some() {
+                        self.white_player_pos = new_pos;
+                    } else {
+                        return Err(ActionError);
+                    }
                 }
                 Team::Black => {
-                    self.data.black_player_pos.add_vec(&vec);
+                    let new_pos = self.black_player_pos.add_vec(&vec);
+                    if self.map.get_tile(&new_pos).is_some() {
+                        self.black_player_pos = new_pos;
+                    } else {
+                        return Err(ActionError);
+                    }
                 }
             },
         };
-        self.white_info_update = Some(BattleInfoUpdate {
-            white_player_pos: self.data.white_player_pos.clone(),
-            black_player_pos: self.data.black_player_pos.clone(),
-            action_set: None,
-        });
-        self.black_info_update = Some(BattleInfoUpdate {
-            white_player_pos: self.data.white_player_pos.clone(),
-            black_player_pos: self.data.black_player_pos.clone(),
-            action_set: None,
-        });
+        let white_info_update = BattleInfoUpdate {
+            white_player_pos: self.white_player_pos.clone(),
+            black_player_pos: self.black_player_pos.clone(),
+        };
+        let black_info_update = BattleInfoUpdate {
+            white_player_pos: self.white_player_pos.clone(),
+            black_player_pos: self.black_player_pos.clone(),
+        };
+        Ok((white_info_update, black_info_update))
     }
-
-    pub fn take_white_battle_info_update(&mut self) -> Option<BattleInfoUpdate> {
-        let update_info = self.white_info_update.take();
-        if let Some(update_info) = update_info {
-            self.white_info.update(&update_info);
-            Some(update_info)
-        } else {
-            None
-        }
-    }
-    pub fn take_black_battle_info_update(&mut self) -> Option<BattleInfoUpdate> {
-        let update_info = self.black_info_update.take();
-        if let Some(update_info) = update_info {
-            self.black_info.update(&update_info);
-            Some(update_info)
-        } else {
-            None
-        }
-    }
-    pub fn white_battle_info(&self) -> &BattleInfo {
-        &self.white_info
-    }
-    pub fn black_battle_info(&self) -> &BattleInfo {
-        &self.black_info
-    }
-}
-
-pub type ActionSet = Vec<Action>;
-pub type ActionIndex = usize;
-
-#[derive(Deserialize, Serialize, Copy, Clone)]
-pub enum Team {
-    Black,
-    White,
-}
-
-#[derive(Deserialize, Serialize, Clone)]
-pub struct Action {
-    team: Team,
-    action_type: ActionType,
-}
-
-#[derive(Deserialize, Serialize, Clone)]
-pub enum ActionType {
-    Move(TileVec),
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct BattleInfo {
     map: Map,
-    action_set: ActionSet,
+    team: Team,
+    team_turn: Team,
     black_player_pos: TilePos,
     white_player_pos: TilePos,
 }
 
 impl BattleInfo {
-    pub fn from_battle_data(battle_data: &BattleData, team: Team) -> BattleInfo {
-        BattleInfo {
-            map: battle_data.map.clone(),
-            action_set: battle_data.get_action_set(team),
-            black_player_pos: battle_data.black_player_pos.clone(),
-            white_player_pos: battle_data.white_player_pos.clone(),
-        }
-    }
     pub fn update(&mut self, update: &BattleInfoUpdate) {
         self.black_player_pos = update.black_player_pos.clone();
         self.white_player_pos = update.white_player_pos.clone();
+    }
+    pub fn get_actions(&self) -> Vec<Action> {
+        if self.team == self.team_turn {
+            match self.team {
+                Team::White => vec![Action::Move(TileVec::new(1, 0))],
+                Team::Black => vec![Action::Move(TileVec::new(0, -1))],
+            }
+        } else {
+            panic!("cant get actions when its not my turn");
+        }
     }
 }
 
@@ -154,5 +103,15 @@ impl BattleInfo {
 pub struct BattleInfoUpdate {
     black_player_pos: TilePos,
     white_player_pos: TilePos,
-    action_set: Option<ActionSet>,
+}
+
+#[derive(Deserialize, Serialize, Copy, Clone, PartialEq)]
+pub enum Team {
+    Black,
+    White,
+}
+
+#[derive(Deserialize, Serialize, Clone, PartialEq)]
+pub enum Action {
+    Move(TileVec),
 }

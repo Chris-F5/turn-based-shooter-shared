@@ -12,13 +12,15 @@ impl TilePos {
     pub fn world_pos(&self) -> WorldPos {
         WorldPos::new(self.x as f64, self.y as f64)
     }
-    pub fn add_vec(&mut self, vec: &TileVec) {
-        self.x = (self.x as i32 + vec.x) as u32;
-        self.y += (self.y as i32 + vec.y) as u32;
+    pub fn add_vec(&mut self, vec: &TileVec) -> TilePos {
+        TilePos::new(
+            (self.x as i32 + vec.x) as u32,
+            (self.y as i32 + vec.y) as u32,
+        )
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct TileVec {
     pub x: i32,
     pub y: i32,

@@ -49,10 +49,14 @@ impl Map {
             tiles,
         }
     }
-    pub fn get_tile(&self, pos: &TilePos) -> &Tile {
+    pub fn get_tile(&self, pos: &TilePos) -> Option<&Tile> {
         let x = pos.x as usize;
         let y = pos.y as usize;
-        &self.tiles[y * self.x_size + x]
+        if x < self.x_size && y < self.y_size {
+            Some(&self.tiles[y * self.x_size + x])
+        } else {
+            None
+        }
     }
     pub fn set_tile(&mut self, pos: &TilePos, tile: Tile) {
         let x = pos.x as usize;
