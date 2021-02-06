@@ -13,6 +13,12 @@ pub struct Battle {
     team_turn: Team,
 }
 pub struct ActionError;
+impl std::fmt::Debug for ActionError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "cant play this action")
+    }
+}
+
 impl Battle {
     pub fn new() -> Battle {
         let mut map = Map::new(8, 8);
