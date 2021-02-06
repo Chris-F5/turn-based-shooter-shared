@@ -30,7 +30,7 @@ impl Battle {
             team_turn: Team::White,
         }
     }
-    pub fn battle_info(&self, team: Team) -> BattleInfo {
+    pub fn get_battle_info(&self, team: Team) -> BattleInfo {
         BattleInfo {
             team,
             team_turn: self.team_turn,
