@@ -40,4 +40,7 @@ impl WorldPos {
     pub fn new(x: f64, y: f64) -> WorldPos {
         WorldPos { x, y }
     }
+    pub fn tile_pos(&self) -> TilePos {
+        TilePos::new(self.x.floor() as u32, self.y.floor() as u32)
+    }
 }
