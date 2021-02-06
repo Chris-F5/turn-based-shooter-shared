@@ -103,12 +103,27 @@ impl BattleInfo {
             panic!("cant get actions when its not my turn");
         }
     }
+    pub fn team(&self) -> &Team {
+        &self.team
+    }
+    pub fn my_turn(&self) -> bool {
+        self.team == self.team_turn
+    }
+    pub fn white_player_pos(&self) -> &TilePos {
+        &self.white_player_pos
+    }
+    pub fn black_player_pos(&self) -> &TilePos {
+        &self.black_player_pos
+    }
+    pub fn map(&self) -> &Map {
+        &self.map
+    }
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct BattleInfoUpdate {
-    black_player_pos: TilePos,
-    white_player_pos: TilePos,
+    pub black_player_pos: TilePos,
+    pub white_player_pos: TilePos,
 }
 
 #[derive(Deserialize, Serialize, Copy, Clone, PartialEq)]
