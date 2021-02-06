@@ -2,21 +2,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TilePos {
-    pub x: u32,
-    pub y: u32,
+    pub x: i32,
+    pub y: i32,
 }
 impl TilePos {
-    pub fn new(x: u32, y: u32) -> TilePos {
+    pub fn new(x: i32, y: i32) -> TilePos {
         TilePos { x, y }
     }
     pub fn world_pos(&self) -> WorldPos {
         WorldPos::new(self.x as f64, self.y as f64)
     }
     pub fn add_vec(&mut self, vec: &TileVec) -> TilePos {
-        TilePos::new(
-            (self.x as i32 + vec.x) as u32,
-            (self.y as i32 + vec.y) as u32,
-        )
+        TilePos::new(self.x + vec.x, self.y + vec.y)
     }
 }
 
@@ -41,6 +38,6 @@ impl WorldPos {
         WorldPos { x, y }
     }
     pub fn tile_pos(&self) -> TilePos {
-        TilePos::new(self.x.floor() as u32, self.y.floor() as u32)
+        TilePos::new(self.x.floor() as i32, self.y.floor() as i32)
     }
 }
