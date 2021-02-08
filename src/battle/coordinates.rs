@@ -12,7 +12,7 @@ impl TilePos {
     pub fn world_pos(&self) -> WorldPos {
         WorldPos::new(self.x as f64, self.y as f64)
     }
-    pub fn add_vec(&mut self, vec: &TileVec) -> TilePos {
+    pub fn add_vec(&self, vec: &TileVec) -> TilePos {
         TilePos::new(self.x + vec.x, self.y + vec.y)
     }
 }
